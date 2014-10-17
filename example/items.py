@@ -30,3 +30,18 @@ class QuestionItemLoader(ItemLoader):
     default_input_processor = MapCompose(lambda s: s.strip())
     default_output_processor = TakeFirst()
     id_in = Identity()
+
+
+class AnswerItem(Item):
+    id = Field()
+    content = Field()
+    author = Field()
+    upvote = Field()
+    comment_count = Field()
+    last_update_time = Field()
+
+class AnswerItemLoader(ItemLoader):
+    default_item_class = AnswerItem
+    default_input_processor = MapCompose(lambda s: s.strip())
+    default_output_processor = TakeFirst()
+

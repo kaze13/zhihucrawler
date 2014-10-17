@@ -2,7 +2,7 @@ from scrapy.selector import Selector
 from scrapy.contrib.linkextractors import LinkExtractor
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy import log
-from example.items import QuestionItemLoader
+from example.items import QuestionItemLoader, AnswerItemLoader
 
 
 class ZhihuSpider(CrawlSpider):
@@ -33,3 +33,17 @@ class ZhihuSpider(CrawlSpider):
         yield el.load_item()
 
         # extract answer
+
+        answer_containsers = response.xpath("//div[@id='zh-question-answer-wrap']/div")
+        for container in answer_containsers:
+            al = AnswerItemLoader(response=response)
+            al.add_value('id', container.xpath('.//@data-aid'))
+            al.add_value('content', container.xpath(".//div/div[@class='zm-item-rich-text']/div/node()"))
+            al.add_value('author', container.xpath(".//answer-head/zm-item-answer-author-info/h3["
+                                                   "@class='zm-item-answer-author-wrap']/a[last("
+                                                   ")]/text()"))
+            al.add_value('upvote', container.xpath(""))
+
+            yield al.load_item()
+
+

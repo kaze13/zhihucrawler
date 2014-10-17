@@ -61,17 +61,17 @@ class MySQLStorePipeline(object):
                 SET name=%s, description=%s, url=%s, updated=%s
                 WHERE guid=%s
             """, (item['name'], item['description'], item['url'], now, guid))
-            spider.log("Item updated in db: %s %r" % (guid, item))
+            spider.log("Item updated in db: %s %r" % (item['id'], item))
         else:
             conn.execute("""
                 INSERT INTO question (id, title, content, author, tags,
                 comment_count, watch_count, related_question, browesed_count, recent_active_time
                 related_watch_count, crawled, spider, url)
                 VALUES (%s, %s, %s, %s, %s,%s, %s, %s, %s, %s,%s, %s, %s, %s)
-            """, (guid, item['id'], item['title'], item['content'], item['author'], item['tags'], item['comment_count'],
+            """, ( item['id'], item['title'], item['content'], item['author'], item['tags'], item['comment_count'],
             item['watch_count'], item['related_question'], item['browesed_count'],item['recent_active_time'], item['related_watch_count'],
             item['crawled'],item['spider'], item['url'],))
-            spider.log("Item stored in db: %s %r" % (guid, item))
+            spider.log("Item stored in db: %s %r" % (item['id'], item))
 
     def _handle_error(self, failure, item, spider):
         """Handle occurred on db interaction."""
